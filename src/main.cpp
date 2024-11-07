@@ -1,13 +1,18 @@
 #include <iostream>
 #include <locale>
 
-#include "Tabuleiro.hpp"
+#include "Grafo.hpp"
 
 using namespace std;
 
 int main() {
-    Tabuleiro tabuleiro(5);
-    cout << "\n\nBarreira = " << tabuleiro.getBarreira(1, 2, 2, 2) << "\n\n\n";
-    tabuleiro.getGrafo().exibirGrafo();
+    Grafo grafo;
+    grafo.exibirGrafo();
+
+    vector<char> caminho = grafo.bfs('U', 'E');
+    grafo.exibirCaminho(caminho, 1);
+    caminho = grafo.dfs('U', 'E');
+    grafo.exibirCaminho(caminho, 2);
+    cout << "\n";
     return 0;
 }
