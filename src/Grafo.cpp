@@ -49,12 +49,13 @@ void Grafo::exibirGrafo(){
 }
 
 
-vector<char> Grafo::bfs(char inicio, char objetivo) {
+vector<char> Grafo::bfs(char inicio, char objetivo, size_t* max_tamanho_fila){
     unordered_map<char, bool> visitado;
     unordered_map<char, char> predecessor;
     queue<char> fila;
     visitado[inicio] = true;
     fila.push(inicio);
+    *max_tamanho_fila = fila.size();
     while (!fila.empty()) {
         char atual = fila.front();
         fila.pop();
@@ -72,17 +73,19 @@ vector<char> Grafo::bfs(char inicio, char objetivo) {
                 visitado[vizinho] = true;
                 predecessor[vizinho] = atual;
                 fila.push(vizinho);
+                *max_tamanho_fila = max(*max_tamanho_fila, fila.size());
             }
         }
     }
     return {};
 }
 
-vector<char> Grafo::dfs(char inicio, char objetivo) {
+vector<char> Grafo::dfs(char inicio, char objetivo, size_t* max_tamanho_pilha) {
     stack<char> pilha;
     unordered_set<char> visitados;
     vector<char> caminho;
     pilha.push(inicio);
+    *max_tamanho_pilha = pilha.size();
     while (!pilha.empty()) {
         char atual = pilha.top();
         pilha.pop();
@@ -96,6 +99,7 @@ vector<char> Grafo::dfs(char inicio, char objetivo) {
             for (auto vizinho : adjacencias[atual]) {
                 if (visitados.find(vizinho) == visitados.end()) {
                     pilha.push(vizinho);
+                    *max_tamanho_pilha = max(*max_tamanho_pilha, pilha.size());
                 }
             }
         }

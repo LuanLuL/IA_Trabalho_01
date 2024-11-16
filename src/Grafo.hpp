@@ -23,8 +23,8 @@ class Grafo {
         void adicionarVertice(char vertice);
         void adicionarAresta(char origem, char destino);
         void exibirGrafo();
-        vector<char> bfs(char inicio, char objetivo);
-        vector<char> dfs(char inicio, char objetivo);
+        vector<char> bfs(char inicio, char objetivo, size_t* max_tamanho_fila);
+        vector<char> dfs(char inicio, char objetivo, size_t* max_tamanho_pilha);
         void exibirCaminho(const vector<char>& caminho, int busca);
 };
 
