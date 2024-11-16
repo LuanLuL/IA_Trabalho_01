@@ -6,6 +6,12 @@
 
 using namespace std;
 
+bool testarCompletudeBFS(Grafo& grafo);
+bool testarCompletudeDFS(Grafo& grafo);
+void medirDesempenhoBFS(Grafo& grafo, double& tempo, size_t& max_tamanho_fila, size_t& tamanho_caminho);
+void medirDesempenhoDFS(Grafo& grafo, double& tempo, size_t& max_tamanho_pilha, size_t& tamanho_caminho);
+void exibirComparacao(double tempo_bfs, size_t max_tamanho_fila, size_t tamanho_caminho_bfs, bool bfs_completo, double tempo_dfs, size_t max_tamanho_pilha, size_t tamanho_caminho_dfs, bool dfs_otimo, bool dfs_completo);
+
 int main() {
     Grafo grafo;
     grafo.exibirGrafo();
@@ -13,46 +19,70 @@ int main() {
     double tempo_bfs, tempo_dfs;
     size_t max_tamanho_fila = 0, max_tamanho_pilha = 0;
     size_t tamanho_caminho_bfs = 0, tamanho_caminho_dfs = 0;
-    bool dfs_otimo = false;
+    bool bfs_completo, dfs_completo, dfs_otimo = false;
 
-    auto inicio_bfs = chrono::high_resolution_clock::now();
-    vector<char> caminho_bfs = grafo.bfs('U', 'E', &max_tamanho_fila);
-    auto fim_bfs = chrono::high_resolution_clock::now();
-    tempo_bfs = chrono::duration<double, milli>(fim_bfs - inicio_bfs).count();
-    tamanho_caminho_bfs = caminho_bfs.size() - 1;
-    grafo.exibirCaminho(caminho_bfs, 1);
-    cout << "Tempo de execução do BFS: " << tempo_bfs << "ms\n";
-    cout << "Consumo de memória do BFS: " << max_tamanho_fila << " elementos na fila\n";
-    cout << "Tamanho do caminho encontrado pelo BFS: " << tamanho_caminho_bfs << " arestas\n";
+    bfs_completo = testarCompletudeBFS(grafo);
+    dfs_completo = testarCompletudeDFS(grafo);
 
+    medirDesempenhoBFS(grafo, tempo_bfs, max_tamanho_fila, tamanho_caminho_bfs);
+    medirDesempenhoDFS(grafo, tempo_dfs, max_tamanho_pilha, tamanho_caminho_dfs);
 
-    auto inicio_dfs = chrono::high_resolution_clock::now();
-    vector<char> caminho_dfs = grafo.dfs('U', 'E', &max_tamanho_pilha);
-    auto fim_dfs = chrono::high_resolution_clock::now();
-    tempo_dfs = chrono::duration<double, milli>(fim_dfs - inicio_dfs).count();
-    tamanho_caminho_dfs = caminho_dfs.size() -1;
-    grafo.exibirCaminho(caminho_dfs, 2);
-    cout << "Tempo de execução do DFS: " << tempo_dfs << "ms\n";
-    cout << "Consumo de memória do DFS: " << max_tamanho_pilha << " elementos na pilha\n";
-    cout << "Tamanho do caminho encontrado pelo DFS: " << tamanho_caminho_dfs << " arestas\n";
+    if (tamanho_caminho_dfs == tamanho_caminho_bfs) dfs_otimo = true;
 
-    if(!caminho_bfs.empty() && !caminho_dfs.empty()){
-        dfs_otimo = (tamanho_caminho_dfs == tamanho_caminho_bfs);
-    }
+    exibirComparacao(tempo_bfs, max_tamanho_fila, tamanho_caminho_bfs, bfs_completo, tempo_dfs, max_tamanho_pilha, tamanho_caminho_dfs, dfs_otimo, dfs_completo);
 
-    cout << "\n==================== COMPARAÇÃO DOS RESULTADOS ====================\n";
-    cout << "Algoritmo\t| Tempo de Execução\t| Consumo de Memória\t| Optimalidade\n";
-    cout << "-------------------------------------------------------------------\n";
-    cout << "BFS\t\t| " << tempo_bfs << "ms\t\t| " << max_tamanho_fila << " elementos\t\t| Ótimo\n";
-    cout << "DFS\t\t| " << tempo_dfs << "ms\t\t| " << max_tamanho_pilha << " elementos\t\t| ";
-    if (dfs_otimo) {
-        cout << "Ótimo\n";
-    } else {
-        cout << "Não Ótimo\n";
-    }
-    cout << "===================================================================\n";
-
-
-    cout << "\n";
     return 0;
+}
+
+
+bool testarCompletudeBFS(Grafo& grafo) {
+    size_t max_tamanho_fila = 0;
+    vector<char> caminho = grafo.bfs('U', 'E', &max_tamanho_fila);
+    if (caminho.empty()) return false;
+
+    caminho = grafo.bfs('U', 'Z', &max_tamanho_fila);
+    if (!caminho.empty()) return false;
+
+    return true;
+}
+
+bool testarCompletudeDFS(Grafo& grafo) {
+    size_t max_tamanho_pilha = 0;
+    vector<char> caminho = grafo.dfs('U', 'E', &max_tamanho_pilha);
+    if (caminho.empty()) return false;
+
+    caminho = grafo.dfs('U', 'Z', &max_tamanho_pilha);
+    if (!caminho.empty()) return false;
+
+    return true;
+}
+
+void medirDesempenhoBFS(Grafo& grafo, double& tempo, size_t& max_tamanho_fila, size_t& tamanho_caminho) {
+    auto inicio = chrono::high_resolution_clock::now();
+    vector<char> caminho = grafo.bfs('U', 'E', &max_tamanho_fila);
+    auto fim = chrono::high_resolution_clock::now();
+    tempo = chrono::duration<double, milli>(fim - inicio).count();
+    tamanho_caminho = caminho.size() - 1;
+    grafo.exibirCaminho(caminho, 1);
+}
+
+void medirDesempenhoDFS(Grafo& grafo, double& tempo, size_t& max_tamanho_pilha, size_t& tamanho_caminho) {
+    auto inicio = chrono::high_resolution_clock::now();
+    vector<char> caminho = grafo.dfs('U', 'E', &max_tamanho_pilha);
+    auto fim = chrono::high_resolution_clock::now();
+    tempo = chrono::duration<double, milli>(fim - inicio).count();
+    tamanho_caminho = caminho.size() - 1;
+    grafo.exibirCaminho(caminho, 2);
+}
+
+void exibirComparacao(double tempo_bfs, size_t max_tamanho_fila, size_t tamanho_caminho_bfs, bool bfs_completo, double tempo_dfs, size_t max_tamanho_pilha, size_t tamanho_caminho_dfs, bool dfs_otimo, bool dfs_completo) {
+    cout << "\n======================================== COMPARAÇÃO DOS RESULTADOS =========================================\n";
+    cout << "Algoritmo\t| Tempo de Execução\t| Consumo de Memória\t| Arestas\t| Optimalidade\t| Completude\n";
+    cout << "------------------------------------------------------------------------------------------------------------\n";
+    cout << "BFS\t\t| " << tempo_bfs << "ms\t\t| " << max_tamanho_fila << " elementos\t\t| " << tamanho_caminho_bfs << "\t\t| Ótimo\t\t| ";
+    cout << (bfs_completo ? "Sim\n" : "Não\n");
+    cout << "DFS\t\t| " << tempo_dfs << "ms\t\t| " << max_tamanho_pilha << " elementos\t\t| " << tamanho_caminho_dfs << "\t\t| ";
+    cout << (dfs_otimo ? "Ótimo\t\t| " : "Não Ótimo\t| ");
+    cout << (dfs_completo ? "Sim\n" : "Não\n");
+    cout << "============================================================================================================\n";
 }
