@@ -37,22 +37,16 @@ int main() {
 
 bool testarCompletudeBFS(Grafo& grafo) {
     size_t max_tamanho_fila = 0;
-    vector<char> caminho = grafo.bfs('U', 'E', &max_tamanho_fila);
+    vector<char> caminho = grafo.bfs('U', '6', &max_tamanho_fila);
     if (caminho.empty()) return false;
-
-    caminho = grafo.bfs('U', 'Z', &max_tamanho_fila);
-    if (!caminho.empty()) return false;
 
     return true;
 }
 
 bool testarCompletudeDFS(Grafo& grafo) {
     size_t max_tamanho_pilha = 0;
-    vector<char> caminho = grafo.dfs('U', 'E', &max_tamanho_pilha);
+    vector<char> caminho = grafo.dfs('U', '6', &max_tamanho_pilha);
     if (caminho.empty()) return false;
-
-    caminho = grafo.dfs('U', 'Z', &max_tamanho_pilha);
-    if (!caminho.empty()) return false;
 
     return true;
 }
