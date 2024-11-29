@@ -1,5 +1,5 @@
 <section>   
-    <h1>📢 Inteligência Artificial: Comparação de Algoritmos de Busca Não Informada no Problema do Labirinto</h1>   
+    <h1>🤖 Inteligência Artificial: Comparação de Algoritmos de Busca Não Informada no Problema do Labirinto</h1>   
     <p>
         Criado em novembro de 2024, o projeto de<strong> Comparação de Algoritmos de Busca Não Informada no Problema do Labirinto</strong> foi desenvolvido em virtude de atender as demandas do curso de Inteligência Artificial, ministrado pelo professor <a href="https://www.linkedin.com/in/tiagofga/" target="_blank">Tiago Alves de Oliveira </a> no Centro Federal de Educação Tecnológica de Minas Gerais (<a href="https://www.divinopolis.cefetmg.br/" target="_blank">CEFET-MG</a>).
     </p>
@@ -17,7 +17,7 @@
     </div>
 </section>
 
-## Compilação e Execução
+## 🔁 Compilação e Execução
 
 Esse pequeno exemplo possui um arquivo [`Makefile`](https://github.com/LuanLuL/IA_Trabalho_01/blob/master/Makefile) que realiza todo o procedimento de compilação e execução. Para tanto, temos as seguintes diretrizes de execução:
 
