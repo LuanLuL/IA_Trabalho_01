@@ -1,7 +1,7 @@
 #include "Grafo.hpp"
 
 Grafo::Grafo(){
-    ifstream file("./dataset/grafo1.txt");
+    ifstream file("./dataset/grafo.txt");
      if(!file.is_open()){
         cerr << "\nErro ao abrir o arquivo grafo.txt\n" << endl;
         exit(1);
